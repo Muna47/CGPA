@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -9,57 +10,63 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Login_info extends JFrame {
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+    private JTextField usernameField = new JTextField(100);
+    private JPasswordField passwordField = new JPasswordField(100);
     private JButton loginButton;
 
+    JLabel l1 = new JLabel("Student name: ");
+    JLabel l2 = new JLabel("Password: ");
     Login_info() {
-        setTitle("User Login");
-        setSize(600, 450);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Login Page");
 
-        usernameField = new JTextField(15);
-        passwordField = new JPasswordField(15);
-        loginButton = new JButton("Login");
+        setLayout(new GridLayout(3,2,10,10));
+        add(l1);
+        add(usernameField);
+        add(l2);
+        add(passwordField);
+        add(new JLabel());
 
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Username:"));
-        panel.add(usernameField);
-        panel.add(new JLabel("Password:"));
-        panel.add(passwordField);
-        panel.add(loginButton);
+        l1.setFont(new Font("Times New Roman", Font.BOLD, 22));
+        l2.setFont(new Font("Times New Roman", Font.BOLD, 22));
+        l1.setHorizontalAlignment(SwingConstants.CENTER);
+        l2.setHorizontalAlignment(SwingConstants.CENTER);
 
-        add(panel);
-
-        loginButton.addActionListener(new ActionListener() {
+        JButton button = new JButton("Submit");
+        add(button);
+        button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 loginUser();
             }
         });
 
-        setVisible(true);
+        getContentPane().setBackground(new Color(191,210,250));
+        ImageIcon logo = new ImageIcon("C:\\Users\\HP\\Downloads\\_ੈ✧‧₊˚༄.jpeg");
+        setIconImage(logo.getImage());
+        setSize(400,300);
+        setLocationRelativeTo(null);
     }
-
-    private void loginUser() {
+    public void loginUser() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Username and Password are required.");
-            return;
-        }
-
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+        try (Connection connection = DatabaseConnection.getconnection()) {
+            String query = "SELECT roll, name, grade, semester FROM info WHERE name = ? AND pass = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, username);
             statement.setString(2, password);
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
 
-            if (resultSet.next()) {
-                JOptionPane.showMessageDialog(this, "Login successful!");
+            if (rs.next()) {
+                int roll = rs.getInt("roll");
+                String name = rs.getString("name");
+                double grade = rs.getDouble("grade");
+                int semester = rs.getInt("semester");
+
+                new UserDashboard(roll, name, grade,semester,password);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid username or password.");
@@ -68,4 +75,6 @@ public class Login_info extends JFrame {
             e.printStackTrace();
         }
     }
+
+
 }

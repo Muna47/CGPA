@@ -17,7 +17,7 @@ public class Login extends JFrame implements ActionListener {
         ImageIcon logo = new ImageIcon("C:\\Users\\HP\\Downloads\\_ੈ✧‧₊˚༄.jpeg");
         setIconImage(logo.getImage());
 
-        ImageIcon bgImage = new ImageIcon("C:\\Users\\HP\\Pictures\\login.jpg");
+        ImageIcon bgImage = new ImageIcon("C:\\Users\\HP\\Pictures\\forecast_pics\\login.png");
         JPanel bgPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -28,11 +28,11 @@ public class Login extends JFrame implements ActionListener {
         bgPanel.setLayout(null);
 
         Main main = new Main();
-        login = main.button_func("Login", 365, 205, 140, 50, 123, 134, 238);
+        login = main.button_func("Login", 555, 195, 140, 50, 123, 134, 238);
         login.addActionListener(this);
         bgPanel.add(login);
 
-        reg = main.button_func("Registration", 355, 265, 160, 50, 123, 134, 238);
+        reg = main.button_func("Registration", 545, 265, 160, 50, 123, 134, 238);
         reg.addActionListener(this);
         bgPanel.add(reg);
 
