@@ -10,11 +10,11 @@ public class Welcome extends JFrame implements ActionListener {
 
     Welcome() {
         setTitle("CGPA Forecast");
-        setSize(944, 550);
+        setSize(978, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageIcon bgImage = new ImageIcon("C:\\Users\\HP\\Pictures\\WELCOME.jpg");
+        ImageIcon bgImage = new ImageIcon("WELCOME.png");
         ImageIcon logo = new ImageIcon("C:\\Users\\HP\\Downloads\\_ੈ✧‧₊˚༄.jpeg");
 
         JPanel bgPanel = new JPanel() {

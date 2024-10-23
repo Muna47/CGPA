@@ -17,7 +17,7 @@ public class Login extends JFrame implements ActionListener {
         ImageIcon logo = new ImageIcon("C:\\Users\\HP\\Downloads\\_ੈ✧‧₊˚༄.jpeg");
         setIconImage(logo.getImage());
 
-        ImageIcon bgImage = new ImageIcon("C:\\Users\\HP\\Pictures\\forecast_pics\\login.png");
+        ImageIcon bgImage = new ImageIcon("login.png");
         JPanel bgPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {

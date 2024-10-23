@@ -11,44 +11,13 @@ public class UserDashboard extends JFrame {
         setSize(676, 380);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        // Set frame icon
         ImageIcon logo = new ImageIcon("C:\\Users\\HP\\Downloads\\_ੈ✧‧₊˚༄.jpeg");
         setIconImage(logo.getImage());
 
-        Font labelFont = new Font("SansSerif", Font.BOLD, 20);
-
-        JLabel rollLabel = new JLabel("Roll: " + roll);
-        rollLabel.setFont(labelFont);
-        JLabel nameLabel = new JLabel("Name: " + name);
-        nameLabel.setFont(labelFont);
-        JLabel text = new JLabel("Previously....");
-        text.setFont(labelFont);
-        JLabel semLabel = new JLabel("Semester no: " + sem_no);
-        semLabel.setFont(labelFont);
-        JLabel gradeLabel = new JLabel("Predicted grade: " + String.format("%.2f", grade));
-        gradeLabel.setFont(labelFont);
-
-        JButton forecastButton = new JButton("New Forecast");
-        forecastButton.setFocusable(false);
-        forecastButton.setSize(150,100);
-        forecastButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                new Semester_choice(name, pass);
-            }
-        });
-
-        JButton closeButton = new JButton("Exit");
-        closeButton.setFocusable(false);
-        closeButton.setSize(150,100);
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-
-        ImageIcon bgImage = new ImageIcon("C:\\Users\\HP\\Pictures\\forecast_pics\\info.png");
+        // Load the provided image as background
+        ImageIcon bgImage = new ImageIcon("dash.png");
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -57,30 +26,57 @@ public class UserDashboard extends JFrame {
             }
         };
 
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        panel.setLayout(null); // Absolute positioning
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(nameLabel, gbc);
+        // Font for values
+        Font valueFont = new Font("SansSerif", Font.BOLD, 16);
 
-        gbc.gridx = 1;
-        panel.add(rollLabel, gbc);
+        // Values to display
+        JLabel nameValue = new JLabel(name, SwingConstants.CENTER);
+        nameValue.setFont(valueFont);
+        nameValue.setBounds(350, 100, 150, 30); // Position of the second column value (centered)
 
-        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 3;
-        panel.add(text, gbc);
+        JLabel rollValue = new JLabel(String.valueOf(roll), SwingConstants.CENTER);
+        rollValue.setFont(valueFont);
+        rollValue.setBounds(340, 140, 150, 30); // Roll value
 
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1;
-        panel.add(semLabel, gbc);
+        JLabel semValue = new JLabel(String.valueOf(sem_no), SwingConstants.CENTER);
+        semValue.setFont(valueFont);
+        semValue.setBounds(340, 170, 150, 30); // Semester value
 
-        gbc.gridx = 1;
-        panel.add(gradeLabel, gbc);
+        JLabel gradeValue = new JLabel(String.format("%.2f", grade), SwingConstants.CENTER);
+        gradeValue.setFont(valueFont);
+        gradeValue.setBounds(340, 210, 150, 30); // Predicted grade value
 
-        gbc.gridx = 0; gbc.gridy = 4;
-        panel.add(forecastButton, gbc);
+        // Create buttons
+        JButton forecastButton = new JButton("New Forecast");
+        forecastButton.setFocusable(false);
+        forecastButton.setBounds(120, 270, 150, 40); // Position similar to image
+        forecastButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new Semester_choice(name, pass); // Navigate to new forecast screen
+            }
+        });
 
-        gbc.gridx = 1;
-        panel.add(closeButton, gbc);
+        JButton closeButton = new JButton("Exit");
+        closeButton.setFocusable(false);
+        closeButton.setBounds(380, 270, 150, 40); // Position similar to image
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Close the application
+            }
+        });
+
+        // Add all components to the panel
+        panel.add(nameValue);
+        panel.add(rollValue);
+        panel.add(semValue);
+        panel.add(gradeValue);
+        panel.add(forecastButton);
+        panel.add(closeButton);
 
         add(panel);
         setVisible(true);

@@ -15,26 +15,44 @@ public class CGPAForecast extends JFrame {
     private List<JTextField> cgpaFields;
     private int n;
     private String name, pass;
-    public CGPAForecast(int n,String name, String pass) {
+
+    public CGPAForecast(int n, String name, String pass) {
         this.name = name;
         this.pass = pass;
         this.n = n;
         this.cgpaFields = new ArrayList<>();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Enter CGPA for Semesters");
-        ImageIcon logo = new ImageIcon("C:\\Users\\HP\\Downloads\\_ੈ✧‧₊˚༄.jpeg");
-        setIconImage(logo.getImage());
-        setLayout(new GridLayout(n + 1, 2, 10, 10));  //
+        setTitle("CGPA Info");  // Window title
 
+        // Set the layout
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(n + 2, 2, 10, 10));  // n fields + 1 label + 1 button
+        panel.setBackground(new Color(24, 11, 89));  // Background color similar to the gradient in your image
+        panel.setOpaque(true);
+
+        // Adding the "cgpa info" label at the top
+        JLabel titleLabel = new JLabel("cgpa info");
+        titleLabel.setForeground(Color.WHITE);  // White color for the text
+        titleLabel.setFont(new Font("League Spartan", Font.BOLD, 24));  // League Spartan font, bold, size 24
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(titleLabel);
+
+        // Empty label to keep the GridLayout balanced
+        panel.add(new JLabel());
+
+        // Adding CGPA input fields
         for (int i = 1; i <= n; i++) {
-            add(new JLabel("Enter CGPA for semester " + i + ":"));
+            JLabel label = new JLabel("Enter CGPA for semester " + i + ":");
+            label.setForeground(Color.WHITE);
+            panel.add(label);
+
             JTextField cgpaField = new JTextField(10);
             cgpaFields.add(cgpaField);
-            add(cgpaField);
+            panel.add(cgpaField);
         }
 
-
+        // Submit button
         JButton confirmButton = new JButton("Submit");
         confirmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -43,12 +61,15 @@ public class CGPAForecast extends JFrame {
             }
         });
 
-        add(new JLabel());
-        add(confirmButton);
+        // Add the button to the panel
+        panel.add(new JLabel());  // Empty space to align the button
+        panel.add(confirmButton);
 
-        setSize(400, 300);
+        // Set content pane and other properties
+        setContentPane(panel);
+        setSize(400, 300 + (n * 40));  // Adjust the size based on the number of fields
         setVisible(true);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);  // Center the window on the screen
     }
 
     public void forecast() {
@@ -65,7 +86,7 @@ public class CGPAForecast extends JFrame {
             double CGPA = regression.predict(n + 1);
             double predictedCGPA = Math.round(CGPA * 100.0) / 100.0;
 
-            try(Connection connection = DatabaseConnection.getconnection()){
+            try (Connection connection = DatabaseConnection.getconnection()) {
                 if (connection == null) {
                     System.out.println("Connection is null. Check the DatabaseConnection class.");
                     return;
@@ -73,10 +94,10 @@ public class CGPAForecast extends JFrame {
 
                 String sql = "UPDATE info SET grade = ?, semester = ? WHERE name = ? AND pass = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setDouble(1,predictedCGPA);
-                statement.setInt(2,n+1);
-                statement.setString(3,name);
-                statement.setString(4,pass);
+                statement.setDouble(1, predictedCGPA);
+                statement.setInt(2, n + 1);
+                statement.setString(3, name);
+                statement.setString(4, pass);
                 int rows_affected = statement.executeUpdate();
 
                 if (rows_affected > 0) {
@@ -84,21 +105,17 @@ public class CGPAForecast extends JFrame {
                 } else {
                     System.out.println("No rows updated. Check if the user exists.");
                 }
-            }
-            catch (SQLException e){
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
 
             JOptionPane.showMessageDialog(null, "Predicted CGPA for semester " + (n + 1) + " is: " + predictedCGPA);
             ForecastGraph graph = new ForecastGraph(cgpaValues);
             graph.setVisible(true);
-        }
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Please enter valid numeric values for CGPA.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "An error occurred: " + ex.getMessage());
         }
-
     }
-
 }

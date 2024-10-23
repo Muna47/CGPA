@@ -8,63 +8,86 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Reg_info extends JFrame implements ActionListener{
-    private final JTextField username = new JTextField(100);
-    private final JTextField user_roll = new JTextField(100);
-    private final JPasswordField password = new JPasswordField(100);
+public class Reg_info extends JFrame implements ActionListener {
+    private final JTextField username = new JTextField(15);
+    private final JTextField user_roll = new JTextField(15);
+    private final JPasswordField password = new JPasswordField(15);
 
-    JButton button = new JButton("register");
-    JPanel panel = new JPanel();
-    JLabel l1 = new JLabel("Name");
-    JLabel l2 = new JLabel("Roll");
-    JLabel l3 = new JLabel("Password");
-    JLabel l4 = new JLabel("Confirm");
+    JCheckBox termsCheckBox = new JCheckBox("Accept Terms & Conditions");
+    JButton registerButton = new JButton("Register");
 
     Reg_info() {
-        setTitle("Registration Form");
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        GridLayout layout = new GridLayout(4,2,10,10);
-        l1.setHorizontalAlignment(SwingConstants.CENTER);
-        l2.setHorizontalAlignment(SwingConstants.CENTER);
-        l3.setHorizontalAlignment(SwingConstants.CENTER);
-        l4.setHorizontalAlignment(SwingConstants.CENTER);
-
-        panel.setLayout(layout);
-        panel.add(l1);
-        panel.add(username);
-        panel.add(l2);
-        panel.add(user_roll);
-        panel.add(l3);
-        panel.add(password);
-        panel.add(l4);
-        panel.add(button);
-        panel.setBackground(new Color(191,210,250));
-        button.setFocusable(false);
-
-        l1.setFont(new Font("Times New Roman", Font.BOLD, 22));
-        l2.setFont(new Font("Times New Roman", Font.BOLD, 22));
-        l3.setFont(new Font("Times New Roman", Font.BOLD, 22));
-        l4.setFont(new Font("Times New Roman", Font.BOLD, 22));
-
-        setSize(450,300);
-        setLocationRelativeTo(null);
-        add(panel);
+        setTitle("Sign Up");
         ImageIcon logo = new ImageIcon("C:\\Users\\HP\\Downloads\\_ੈ✧‧₊˚༄.jpeg");
         setIconImage(logo.getImage());
-        button.addActionListener(this);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+        JLabel nameLabel = new JLabel("Name:");
+        JLabel rollLabel = new JLabel("Roll:");
+        JLabel passLabel = new JLabel("Password:");
+
+        Font font = new Font("Times New Roman", Font.BOLD, 16);
+        nameLabel.setFont(font);
+        rollLabel.setFont(font);
+        passLabel.setFont(font);
+        registerButton.setFont(font);
+        termsCheckBox.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+
+        Dimension fieldDimension = new Dimension(200, 30);
+
+        username.setPreferredSize(fieldDimension);
+        user_roll.setPreferredSize(fieldDimension);
+        password.setPreferredSize(fieldDimension);
+        registerButton.setPreferredSize(new Dimension(100, 30));
+
+        formPanel.add(nameLabel);
+        formPanel.add(username);
+        formPanel.add(rollLabel);
+        formPanel.add(user_roll);
+        formPanel.add(passLabel);
+        formPanel.add(password);
+        formPanel.add(termsCheckBox);
+        formPanel.add(registerButton);
+
+        JPanel imagePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon bgImage = new ImageIcon("reg_bg.png");
+                g.drawImage(bgImage.getImage(), 0, 0, 350, 450, this);
+            }
+        };
+        imagePanel.setPreferredSize(new Dimension(350, 450));
+
+        setLayout(new BorderLayout());
+        add(imagePanel, BorderLayout.WEST);
+        add(formPanel, BorderLayout.CENTER);
+
+        registerButton.addActionListener(this);
+
+        setSize(800, 450);
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == button) {
+        if (e.getSource() == registerButton) {
+            if (!termsCheckBox.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Please accept the terms and conditions.");
+                return;
+            }
             String Name = username.getText();
             String Roll = user_roll.getText();
             String Pass = new String(password.getPassword());
             reg_user(Name, Roll, Pass);
         }
     }
+
     public void reg_user(String Name, String Roll, String Pass) {
         if (Name.isEmpty() || Pass.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Username and Password are required.");
@@ -82,7 +105,7 @@ public class Reg_info extends JFrame implements ActionListener{
             if (rowAffected > 0) {
                 this.dispose();
                 JOptionPane.showMessageDialog(this, "Registration completed successfully!!");
-                new Semester_choice(Name,Pass);
+                new Semester_choice(Name, Pass);
             } else {
                 JOptionPane.showMessageDialog(this, "Registration failed");
             }
@@ -90,5 +113,4 @@ public class Reg_info extends JFrame implements ActionListener{
             System.out.println(e.getMessage());
         }
     }
-
 }
