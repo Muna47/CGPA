@@ -1,9 +1,16 @@
 package com.company;
+<<<<<<< HEAD
 
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 
+=======
+
+import javax.swing.*;
+import java.awt.*;
+
+>>>>>>> fc9cf8f44f469b5f6c981794741622204e087eb1
 class Main {
     public static void main(String args[]) {
         SwingUtilities.invokeLater(() -> new Welcome().setVisible(true));
